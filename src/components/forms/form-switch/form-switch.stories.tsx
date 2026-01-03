@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FormProvider, useForm } from "react-hook-form";
-import { FormSwitch } from "./form-switch";
+import { RHSwitch } from "./rh-switch";
 
-const meta: Meta<typeof FormSwitch> = {
+const meta: Meta<typeof RHSwitch> = {
   title: "Form/FormSwitch",
-  component: FormSwitch,
+  component: RHSwitch,
   tags: ["autodocs"],
   decorators: [
     (Story) => {
@@ -25,7 +25,7 @@ const meta: Meta<typeof FormSwitch> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof FormSwitch>;
+type Story = StoryObj<typeof RHSwitch>;
 
 export const Default: Story = {
   args: {

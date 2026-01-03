@@ -1,13 +1,3 @@
-import { useFormContext, type FieldValues, type Path } from "react-hook-form";
-
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -15,76 +5,69 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 export interface FormSelectOption {
   label: string;
   value: string;
 }
 
-type FormSelectProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends Path<TFieldValues> = Path<TFieldValues>
-> = {
-  name: TName;
+export interface FormSelectProps {
+  value?: string;
+  onValueChange?: (value: string) => void;
+  options: FormSelectOption[];
   label?: string;
   placeholder?: string;
   description?: string;
-  required?: boolean;
+  error?: string;
   disabled?: boolean;
   className?: string;
-  options: FormSelectOption[];
-};
+  required?: boolean;
+  id?: string;
+}
 
-export function FormSelect<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends Path<TFieldValues> = Path<TFieldValues>
->({
-  name,
+export function FormSelect({
+  value,
+  onValueChange,
+  options,
   label,
   placeholder,
   description,
-  required = false,
+  error,
   disabled = false,
   className,
-  options,
-}: FormSelectProps<TFieldValues, TName>) {
-  const { control } = useFormContext<TFieldValues>();
-
+  required = false,
+  id,
+}: FormSelectProps) {
   return (
-    <FormField
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <FormItem className={className}>
-          {label && (
-            <FormLabel>
-              {label} {required && <span className="text-destructive">*</span>}
-            </FormLabel>
-          )}
-
-          <Select
-            onValueChange={field.onChange}
-            defaultValue={field.value}
-            disabled={disabled}
-          >
-            <FormControl>
-              <SelectTrigger>
-                <SelectValue placeholder={placeholder} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {options.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
-        </FormItem>
+    <div className={cn("grid gap-2", className)}>
+      {label && (
+        <Label className={cn(error && "text-destructive")} htmlFor={id}>
+          {label} {required && <span className="text-destructive">*</span>}
+        </Label>
       )}
-    />
+
+      <Select value={value} onValueChange={onValueChange} disabled={disabled}>
+        <SelectTrigger
+          id={id}
+          className={cn(error && "border-destructive focus:ring-destructive")}
+        >
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      {description && (
+        <p className="text-sm text-muted-foreground">{description}</p>
+      )}
+      {error && <p className="text-sm font-medium text-destructive">{error}</p>}
+    </div>
   );
 }

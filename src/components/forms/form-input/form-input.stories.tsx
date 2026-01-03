@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Mail } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
-import { FormInput } from "./form-input";
+import { RHInput } from "./rh-input";
 
-const meta: Meta<typeof FormInput> = {
+const meta: Meta<typeof RHInput> = {
   title: "Form/FormInput",
-  component: FormInput,
+  component: RHInput,
   tags: ["autodocs"],
   decorators: [
     (Story) => {
@@ -22,7 +22,7 @@ const meta: Meta<typeof FormInput> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof FormInput>;
+type Story = StoryObj<typeof RHInput>;
 
 export const Default: Story = {
   args: {

@@ -1,84 +1,70 @@
 import React from "react";
-import { useFormContext, type FieldValues, type Path } from "react-hook-form";
 import { type Options, withMask } from "use-mask-input";
 
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { InputIcon } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
-type FormInputProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends Path<TFieldValues> = Path<TFieldValues>
-> = {
-  name: TName;
+export type FormInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
-  placeholder?: string;
   description?: string;
-  required?: boolean;
-  disabled?: boolean;
-  className?: string;
-  type?: string;
+  error?: string;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
   mask?: string;
   maskOptions?: Options;
 };
 
-export function FormInput<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends Path<TFieldValues> = Path<TFieldValues>
->({
-  name,
-  label,
-  placeholder,
-  description,
-  required = false,
-  disabled = false,
-  className,
-  type = "text",
-  icon,
-  iconPosition = "left",
-  mask,
-  maskOptions,
-}: FormInputProps<TFieldValues, TName>) {
-  const { control } = useFormContext<TFieldValues>();
+export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
+  (
+    {
+      label,
+      description,
+      error,
+      className,
+      required,
+      icon,
+      iconPosition = "left",
+      mask,
+      maskOptions,
+      ...props
+    },
+    ref
+  ) => {
+    const maskRef = mask ? withMask(mask, maskOptions) : undefined;
 
-  const maybeMaskProps = mask ? { ref: withMask(mask, maskOptions) } : {};
+    // If mask is present, we use maskRef. If not, we use the forwarded ref.
+    // Note: Replicating original behavior where mask ref overrides field ref.
+    //Ideally we should merge refs, but strictly following original generic spread behavior implies override.
+    // However, since we have explicit control here:
+    const effectiveRef = mask ? maskRef : ref;
 
-  return (
-    <FormField
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <FormItem className={className}>
-          {label && (
-            <FormLabel>
-              {label} {required && <span className="text-destructive">*</span>}
-            </FormLabel>
-          )}
-
-          <FormControl>
-            <InputIcon
-              type={type}
-              placeholder={placeholder}
-              disabled={disabled}
-              startIcon={iconPosition === "left" ? icon : undefined}
-              endIcon={iconPosition === "right" ? icon : undefined}
-              {...field}
-              {...maybeMaskProps}
-            />
-          </FormControl>
-
-          {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  );
-}
+    return (
+      <div className={cn("grid gap-2", className)}>
+        {label && (
+          <Label className={cn(error && "text-destructive")} htmlFor={props.id}>
+            {label} {required && <span className="text-destructive">*</span>}
+          </Label>
+        )}
+        <div className="relative">
+          <InputIcon
+            ref={effectiveRef}
+            startIcon={iconPosition === "left" ? icon : undefined}
+            endIcon={iconPosition === "right" ? icon : undefined}
+            {...props}
+            className={cn(
+              error && "border-destructive focus-visible:ring-destructive"
+            )}
+          />
+        </div>
+        {description && (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        )}
+        {error && (
+          <p className="text-sm font-medium text-destructive">{error}</p>
+        )}
+      </div>
+    );
+  }
+);
+FormInput.displayName = "FormInput";

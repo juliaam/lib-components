@@ -4,17 +4,17 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import { FormCheckbox } from "./form-checkbox";
+import { Form } from "@/components/forms/form";
+import { RHCheckbox } from "./rh-checkbox";
 
-const meta: Meta<typeof FormCheckbox> = {
+const meta: Meta<typeof RHCheckbox> = {
   title: "Form/FormCheckbox",
-  component: FormCheckbox,
+  component: RHCheckbox,
   tags: ["autodocs"],
 };
 
 export default meta;
-type Story = StoryObj<typeof FormCheckbox>;
+type Story = StoryObj<typeof RHCheckbox>;
 
 const FormSchema = z.object({
   mobile: z.boolean().default(false).optional(),
@@ -36,7 +36,7 @@ export const Default: Story = {
     return (
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormCheckbox
+          <RHCheckbox
             description="You can manage your mobile notification settings in the mobile settings page."
             {...args}
           />

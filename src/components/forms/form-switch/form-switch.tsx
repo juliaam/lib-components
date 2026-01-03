@@ -1,66 +1,53 @@
-import { useFormContext, type FieldValues, type Path } from "react-hook-form";
-
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
-type FormSwitchProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends Path<TFieldValues> = Path<TFieldValues>
-> = {
-  name: TName;
+export interface FormSwitchProps {
+  checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
   label?: string;
   description?: string;
   required?: boolean;
   disabled?: boolean;
   className?: string;
-};
+  error?: string;
+  id?: string;
+}
 
-export function FormSwitch<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends Path<TFieldValues> = Path<TFieldValues>
->({
-  name,
+export function FormSwitch({
+  checked,
+  onCheckedChange,
   label,
   description,
   required = false,
   disabled = false,
   className,
-}: FormSwitchProps<TFieldValues, TName>) {
-  const { control } = useFormContext<TFieldValues>();
-
+  error,
+  id,
+}: FormSwitchProps) {
   return (
-    <FormField
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <FormItem className={className}>
-          <div className="flex items-center space-x-2">
-            <FormControl>
-              <Switch
-                checked={field.value}
-                onCheckedChange={field.onChange}
-                disabled={disabled}
-              />
-            </FormControl>
-            {label && (
-              <FormLabel className="mt-0">
-                {label}{" "}
-                {required && <span className="text-destructive">*</span>}
-              </FormLabel>
-            )}
-          </div>
+    <div className={cn("grid gap-2", className)}>
+      <div className="flex items-center space-x-2">
+        <Switch
+          checked={checked}
+          onCheckedChange={onCheckedChange}
+          disabled={disabled}
+          id={id}
+        />
+        {label && (
+          <Label
+            className={cn("mt-0", error && "text-destructive")}
+            htmlFor={id}
+          >
+            {label} {required && <span className="text-destructive">*</span>}
+          </Label>
+        )}
+      </div>
 
-          {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
-        </FormItem>
+      {description && (
+        <p className="text-sm text-muted-foreground">{description}</p>
       )}
-    />
+      {error && <p className="text-sm font-medium text-destructive">{error}</p>}
+    </div>
   );
 }

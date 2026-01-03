@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FormProvider, useForm } from "react-hook-form";
-import { FormTextarea } from "./form-textarea";
+import { RHTextarea } from "./rh-textarea";
 
-const meta: Meta<typeof FormTextarea> = {
+const meta: Meta<typeof RHTextarea> = {
   title: "Form/FormTextarea",
-  component: FormTextarea,
+  component: RHTextarea,
   tags: ["autodocs"],
   decorators: [
     (Story) => {
@@ -21,7 +21,7 @@ const meta: Meta<typeof FormTextarea> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof FormTextarea>;
+type Story = StoryObj<typeof RHTextarea>;
 
 export const Default: Story = {
   args: {

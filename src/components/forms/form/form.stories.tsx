@@ -13,7 +13,7 @@ import {
 } from "./form";
 
 const meta: Meta<typeof Form> = {
-  title: "UI/Form",
+  title: "Form/Form",
   component: Form,
   tags: ["autodocs"],
 };

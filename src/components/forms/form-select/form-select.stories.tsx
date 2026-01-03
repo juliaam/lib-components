@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FormProvider, useForm } from "react-hook-form";
-import { FormSelect } from "./form-select";
+import { RHSelect } from "./rh-select";
 
-const meta: Meta<typeof FormSelect> = {
+const meta: Meta<typeof RHSelect> = {
   title: "Form/FormSelect",
-  component: FormSelect,
+  component: RHSelect,
   tags: ["autodocs"],
   decorators: [
     (Story) => {
@@ -21,7 +21,7 @@ const meta: Meta<typeof FormSelect> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof FormSelect>;
+type Story = StoryObj<typeof RHSelect>;
 
 export const Default: Story = {
   args: {
